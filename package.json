@@ -1,0 +1,56 @@
+{
+  "name": "electron-driver-licence-app",
+  "productName": "Driver Licence App",
+  "version": "1.0.0",
+  "description": "Driver Licence App",
+  "main": ".webpack/main",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
+  },
+  "keywords": [],
+  "author": {
+    "name": "KhomsiAdam",
+    "email": "khomsiadam@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": "./forge.config.js"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.63",
+    "@types/react": "^18.0.1",
+    "@types/react-dom": "^18.0.0",
+    "@vercel/webpack-asset-relocator-loader": "1.7.0",
+    "autoprefixer": "^10.4.4",
+    "copy-webpack-plugin": "^10.2.4",
+    "css-loader": "^6.0.0",
+    "electron": "18.0.3",
+    "fork-ts-checker-webpack-plugin": "^6.0.1",
+    "node-loader": "^2.0.0",
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1",
+    "style-loader": "^3.0.0",
+    "tailwindcss": "^3.0.23",
+    "ts-loader": "^9.2.2",
+    "typescript": "~4.5.4"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^2.8.8",
+    "electron-squirrel-startup": "^1.0.0",
+    "flowbite": "^1.4.1",
+    "moment": "^2.29.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hook-form": "^7.29.0",
+    "react-router-dom": "^6.3.0",
+    "yup": "^0.32.11"
+  }
+}
