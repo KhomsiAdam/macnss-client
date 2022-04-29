@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext';
 import * as yup from 'yup';
 import { apiUrl } from '../../constants';
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CreateInputs {
   firstname: string;
@@ -17,7 +18,6 @@ interface CreateInputs {
   address: string;
   city: string;
   clientRef: string;
-  medicineRefs: string;
 }
 
 const schema = yup.object().shape({
@@ -32,13 +32,41 @@ const schema = yup.object().shape({
   address: yup.string().required(),
   city: yup.string().required(),
   clientRef: yup.string().required(),
-  medicineRefs: yup.string().required(),
 });
 
 const Create = () => {
+  const navigate = useNavigate();
   const [medicines, setMedicines] = useState<string[]>([]);
   const [clients, setClients] = useState<string[]>([]);
-  const { token } = useContext(AuthContext);
+  const { token, setToken } = useContext(AuthContext);
+  const [inputList, setInputList] = useState([{ medicine: '' }]);
+  const [selectedMedicines, setSelectedMedicines] = useState([]);
+
+  function handleMultipleChange(e: any) {
+    const value = e.target.value;
+    setSelectedMedicines([...selectedMedicines, value]);
+  }
+
+  // handle input change
+  // const handleInputChange = (e: any, index: any) => {
+  //   const { name, value } = e.target;
+  //   const list = [...inputList];
+  //   //@ts-ignore
+  //   list[index][name] = value;
+  //   setInputList(list);
+  // };
+
+  // handle click event of the Remove button
+  const handleRemoveClick = (index: any) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setInputList(list);
+  };
+
+  // handle click event of the Add button
+  const handleAddClick = () => {
+    setInputList([...inputList, { medicine: '' }]);
+  };
 
   const getClients = async () => {
     const response = await fetch(`${apiUrl}/clients`, {
@@ -48,9 +76,14 @@ const Create = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const res = await response.json();
-    console.log(res);
-    setClients(res);
+    if (response.status === 200) {
+      const res = await response.json();
+      setClients(res);
+    } else {
+      setToken('');
+      localStorage.removeItem('token');
+      navigate('/');
+    }
   };
 
   const getMedicines = async () => {
@@ -61,9 +94,14 @@ const Create = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const res = await response.json();
-    console.log(res);
-    setMedicines(res);
+    if (response.status === 200) {
+      const res = await response.json();
+      setMedicines(res);
+    } else {
+      setToken('');
+      localStorage.removeItem('token');
+      navigate('/');
+    }
   };
 
   useEffect(() => {
@@ -102,10 +140,13 @@ const Create = () => {
     delete data.year;
     delete data.month;
     delete data.day;
+    data.medicineRefs = selectedMedicines;
+    console.log(data);
     const response = await fetch(`${apiUrl}/files`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
@@ -116,7 +157,7 @@ const Create = () => {
   return (
     <>
       <form
-        className='container max-w-lg mx-auto my-12 overflow-auto'
+        className='container max-w-lg mx-auto my-12 overflow-auto custom-scrollbar'
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className='grid grid-cols-1 gap-4'>
@@ -126,6 +167,7 @@ const Create = () => {
           <input
             className='input-primary'
             type='text'
+            value='Firstname'
             {...register('firstname')}
           />
           <p className='text-lg font-medium select-none text-primary-500'>
@@ -139,6 +181,7 @@ const Create = () => {
           <input
             className='input-primary'
             type='text'
+            value='Lastname'
             {...register('lastname')}
           />
           <p className='text-lg font-medium select-none text-primary-500'>
@@ -155,6 +198,7 @@ const Create = () => {
                 className='w-full text-center input-primary'
                 type='number'
                 placeholder='DD'
+                value={1}
                 min={1}
                 max={31}
                 // maxLength={2}
@@ -167,6 +211,7 @@ const Create = () => {
                 className='w-full text-center input-primary'
                 type='number'
                 placeholder='MM'
+                value={1}
                 min={1}
                 max={12}
                 // maxLength={2}
@@ -179,6 +224,7 @@ const Create = () => {
                 className='w-full text-center input-primary'
                 type='number'
                 placeholder='YYYY'
+                value={1991}
                 min={1900}
                 max={new Date().getFullYear() - 18}
                 // maxLength={4}
@@ -198,6 +244,7 @@ const Create = () => {
           <input
             className='input-primary'
             type='email'
+            value='example@cnss.net'
             {...register('email')}
           />
           <p className='text-lg font-medium select-none text-primary-500'>
@@ -208,7 +255,12 @@ const Create = () => {
           <label className='text-lg font-medium text-gray-700 select-none'>
             Phone
           </label>
-          <input className='input-primary' type='text' {...register('phone')} />
+          <input
+            className='input-primary'
+            value='0123456789'
+            type='text'
+            {...register('phone')}
+          />
           <p className='text-lg font-medium select-none text-primary-500'>
             {errors.phone?.message}
           </p>
@@ -217,7 +269,12 @@ const Create = () => {
           <label className='text-lg font-medium text-gray-700 select-none'>
             CIN
           </label>
-          <input className='input-primary' type='text' {...register('CIN')} />
+          <input
+            className='input-primary'
+            value='A123456'
+            type='text'
+            {...register('CIN')}
+          />
           <p className='text-lg font-medium select-none text-primary-500'>
             {errors.CIN?.message}
           </p>
@@ -229,6 +286,7 @@ const Create = () => {
           <input
             className='input-primary'
             type='text'
+            value='Address'
             {...register('address')}
           />
           <p className='text-lg font-medium select-none text-primary-500'>
@@ -239,7 +297,12 @@ const Create = () => {
           <label className='text-lg font-medium text-gray-700 select-none'>
             City
           </label>
-          <input className='input-primary' type='text' {...register('city')} />
+          <input
+            className='input-primary'
+            type='text'
+            value='City'
+            {...register('city')}
+          />
           <p className='text-lg font-medium select-none text-primary-500'>
             {errors.city?.message}
           </p>
@@ -248,7 +311,14 @@ const Create = () => {
           <label className='text-lg font-medium text-gray-700 select-none'>
             Client
           </label>
-          <select className='input-primary' {...register('clientRef')}>
+          <select
+            className='input-primary'
+            defaultValue=''
+            {...register('clientRef')}
+          >
+            <option value='' disabled hidden>
+              -- Select a client --
+            </option>
             {clients.map((client: any) => (
               <option key={client._id} value={client.ref}>
                 {client.firstname} {client.lastname} - (ref: {client.ref})
@@ -263,16 +333,46 @@ const Create = () => {
           <label className='text-lg font-medium text-gray-700 select-none'>
             Pick Medicines
           </label>
-          <select className='input-primary' {...register('clientRef')}>
-            {medicines.map((medicine: any) => (
-              <option key={medicine._id} value={medicine.ref}>
-                {medicine?.name} - (ref: {medicine.ref})
-              </option>
-            ))}
-          </select>
-          <p className='text-lg font-medium select-none text-primary-500'>
-            {errors.clientRef?.message}
-          </p>
+          {inputList.map((x, i) => {
+            return (
+              <>
+                <select
+                  className='input-primary'
+                  name={`medicine${i}`}
+                  key={i}
+                  onChange={handleMultipleChange}
+                  defaultValue=''
+                >
+                  <option value='' disabled hidden>
+                    -- Select a medicine --
+                  </option>
+                  {medicines.map((medicine: any) => (
+                    <option key={medicine._id} value={medicine.ref}>
+                      {medicine?.name} - (ref: {medicine.ref})
+                    </option>
+                  ))}
+                </select>
+                <div>
+                  {inputList.length - 1 === i && (
+                    <button
+                      className='mr-3 btn-primary'
+                      onClick={handleAddClick}
+                    >
+                      Add
+                    </button>
+                  )}
+                  {inputList.length !== 1 && (
+                    <button
+                      className='mr-3 btn-danger'
+                      onClick={() => handleRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              </>
+            );
+          })}
         </div>
         <div className='flex justify-end'>
           <button className='w-full py-3 mt-4 text-lg select-none btn-primary'>

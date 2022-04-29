@@ -19,16 +19,33 @@ body {
   .btn-secondary {
     @apply bg-secondary-500 rounded-full min-w-[90px] py-2 px-4 text-white font-bold lg:hover:bg-primary-500;
   }
+  .btn-danger {
+    @apply bg-red-700 rounded-full min-w-[90px] py-2 px-4 text-white font-bold lg:hover:bg-red-800;
+  }
   .input-primary {
-    @apply h-[50px] py-3 text-base font-normal text-gray-800 border-2 border-solid rounded-full select-none focus:border-secondary-500;
+    @apply h-[50px] py-3 px-6 text-base font-normal text-gray-800 border-2 border-primary-500 border-solid rounded-full select-none focus:border-secondary-500;
     box-shadow: none !important;
     outline: none !important;
   }
 }
 
-.progress-bar {
-  background: linear-gradient(to left, #be3459, #eda9a9);
-  box-shadow: 0 3px 3px -5px #be3459, 0 2px 5px #be3459;
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1e4584 white;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 1rem;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: white;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e4584;
+  border-radius: 15px;
+  border: 5px solid white;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1faaac;
 }
 
 /* Chrome, Safari, Edge, Opera */

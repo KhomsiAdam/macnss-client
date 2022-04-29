@@ -23,6 +23,7 @@ const Login = () => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       setToken(localStorage.getItem('token') as string);
+      navigate('/dashboard');
     }
   });
 
@@ -44,7 +45,6 @@ const Login = () => {
     });
     const res = await response.json();
     localStorage.setItem('token', res.token);
-    navigate('/dashboard');
   };
 
   return (

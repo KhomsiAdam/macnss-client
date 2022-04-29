@@ -32,7 +32,7 @@ const Records = () => {
   return (
     <>
       {token !== '' && Array.isArray(files) && files.length > 0 ? (
-        <div className='relative overflow-x-auto shadow-md sm:rounded-lg mx-auto w-[90%]'>
+        <div className='relative overflow-x-auto shadow-md sm:rounded-lg mx-auto w-[90%] custom-scrollbar'>
           <table className='w-full text-sm text-left text-gray-500'>
             <thead className='text-xs text-white uppercase bg-primary-500'>
               <tr>

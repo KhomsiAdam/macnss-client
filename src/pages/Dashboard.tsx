@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import DashboardContext from '../context/DashboardContext';
+// import DashboardContext from '../context/DashboardContext';
 import Selection from '../components/Selection';
 import Users from '../components/Users';
 import Records from '../components/Records';
@@ -9,10 +9,10 @@ import Create from '../components/Create';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  // const [isLoaded, setIsLoaded] = useState<boolean>(true);
   const { token, setToken } = useContext(AuthContext);
-  const { isDashboard, setIsDashboard, isClients, setIsClients } =
-    useContext(DashboardContext);
+  // const { isDashboard, setIsDashboard, isClients, setIsClients } =
+  //   useContext(DashboardContext);
 
   const handleLogout = () => {
     if (localStorage.getItem('token')) {
@@ -30,7 +30,6 @@ export default function Dashboard() {
   //   setIsLoaded(true);
   // };
   useEffect(() => {
-    setIsLoaded(false);
     console.log(token);
   }, [token]);
 
@@ -76,9 +75,11 @@ export default function Dashboard() {
               ></path>
             </svg>
           </button>
-          <div className='mx-auto mb-16'>
-            <img src='/assets/images/cnss.png' alt='test' />
-          </div>
+          <img
+            className='mx-auto my-8 w-[30%]'
+            src='/assets/images/cnss.png'
+            alt='test'
+          />
           <>
             <Routes>
               <Route path='/' element={<Selection />} />
